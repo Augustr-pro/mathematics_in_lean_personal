@@ -53,15 +53,73 @@ example
     rw [h1]
     rw [mul_assoc]
 
-example (a b c d e f : ℝ) (h : b * c = e * f) : a * b * c * d = a * e * f * d := by
-  sorry
+-- trad
+example
+(a b c d e f : ℝ)
+(h : b * c = e * f)
+ : a * b * c * d = a * e * f * d :=
+  by
+    rw [mul_assoc a b c]
+    rw [h]
+    rw [← mul_assoc a e f]
 
-example (a b c d : ℝ) (hyp : c = b * a - d) (hyp' : d = a * b) : c = 0 := by
-  sorry
+-- pretty
+example
+(a b c d e f : ℝ)
+(h : b * c = e * f)
+ : a * b * c * d = a * e * f * d :=
+  calc
+    a * b * c * d = a * b * c * d       := by rw []
+    _             = a * (b * c) * d     := by rw [mul_assoc a b c]
+    _             = a * (e * f) * d     := by rw [h]
+    _             = a * e * f * d       := by rw [← mul_assoc a e f]
+
+
+-- trad
+theorem e1
+(a b c d : ℝ)
+(hyp : c = b * a - d)
+(hyp' : d = a * b)
+: c = 0 :=
+  by
+    rw [hyp]
+    rw [hyp']
+    rw [mul_comm b a]
+    rw [sub_self (a*b)]
+
+#print e1
+
+-- pretty
+theorem e2
+(a b c d : ℝ)
+(hyp : c = b * a - d)
+(hyp' : d = a * b)
+: c = 0 :=
+  calc
+    c = c                   := by rw []
+    _ = b * a - d           := by rw [hyp]
+    _ = b * a - a * b       := by rw [hyp']
+    _ = a * b - a * b       := by rw [mul_comm b a]
+    _ = 0                   := by rw [sub_self (a*b)]
+
+#print e2
+-- looks different in the printout, wonder about runtime on check
+
+-- sans.tactic
+theorem e1.st : ∀ (a b c d : ℝ), c = b * a - d → d = a * b → c = 0 :=
+fun a b c d hyp hyp' =>
+  Eq.mpr (id (congrArg (fun _a => _a = 0) hyp))
+    (Eq.mpr (id (congrArg (fun _a => b * a - _a = 0) hyp'))
+      (Eq.mpr (id (congrArg (fun _a => _a - a * b = 0) (mul_comm b a)))
+        (Eq.mpr (id (congrArg (fun _a => _a = 0) (sub_self (a * b)))) (Eq.refl 0))))
+
+#print e1.st
+#check e1.st
 
 example (a b c d e f : ℝ) (h : a * b = c * d) (h' : e = f) : a * (b * e) = c * (d * f) := by
   rw [h', ← mul_assoc, h, mul_assoc]
 
+--sec1
 section
 
 variable (a b c d e f : ℝ)
@@ -70,7 +128,9 @@ example (h : a * b = c * d) (h' : e = f) : a * (b * e) = c * (d * f) := by
   rw [h', ← mul_assoc, h, mul_assoc]
 
 end
+--sec1
 
+--sec2
 section
 variable (a b c : ℝ)
 
@@ -84,7 +144,9 @@ variable (a b c : ℝ)
 #check mul_comm
 
 end
+--sec2
 
+-- sec3
 section
 variable (a b : ℝ)
 
@@ -93,6 +155,7 @@ example : (a + b) * (a + b) = a * a + 2 * (a * b) + b * b := by
   rw [← add_assoc, add_assoc (a * a)]
   rw [mul_comm b a, ← two_mul]
 
+-- I see the vision, but it disgusts me
 example : (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
   calc
     (a + b) * (a + b) = a * a + b * a + (a * b + b * b) := by
@@ -112,13 +175,30 @@ example : (a + b) * (a + b) = a * a + 2 * (a * b) + b * b :=
       sorry
 
 end
+-- sec3
 
 -- Try these. For the second, use the theorems listed underneath.
+-- sec4
 section
 variable (a b c d : ℝ)
 
+-- pure
 example : (a + b) * (c + d) = a * c + a * d + b * c + b * d := by
-  sorry
+  rw [mul_add, add_mul, add_mul, ← add_assoc, add_assoc (a*c), add_comm (b*c) (a*d), ← add_assoc (a*c)]
+
+-- structured
+example
+: (a + b) * (c + d) = a * c + a * d + b * c + b * d :=
+  calc
+    (a + b) * (c + d) = (a + b) * c + (a + b) * d           := by rw [mul_add]
+    _                 = a * c + b * c + (a + b) * d         := by rw [add_mul]
+    _                 = a * c + b * c + (a * d + b * d)     := by rw [add_mul]
+    _                 = a * c + b * c + a * d + b * d       := by rw [← add_assoc]
+    _                 = a * c + (b * c + a * d) + b * d     := by rw [add_assoc (a*c)]
+    _                 = a * c + (a * d + b * c) + b * d     := by rw [add_comm (b*c) (a*d)]
+    _                 = a * c + a * d + b * c + b * d       := by rw [← add_assoc (a*c)]
+
+
 
 example (a b : ℝ) : (a + b) * (a - b) = a ^ 2 - b ^ 2 := by
   sorry
@@ -131,9 +211,11 @@ example (a b : ℝ) : (a + b) * (a - b) = a ^ 2 - b ^ 2 := by
 #check add_zero a
 
 end
+-- sec4
 
 -- Examples.
 
+-- sec5
 section
 variable (a b c d : ℝ)
 
@@ -158,6 +240,7 @@ example (hyp : c = d * a + b) (hyp' : b = a * d) : c = 2 * a * d := by
   ring
 
 end
+-- sec5
 
 example (a b c : ℕ) (h : a + b = c) : (a + b) * (a + b) = a * c + b * c := by
   nth_rw 2 [h]
