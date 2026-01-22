@@ -200,8 +200,14 @@ example
 
 
 
-example (a b : ℝ) : (a + b) * (a - b) = a ^ 2 - b ^ 2 := by
-  sorry
+example
+(a b : ℝ)
+: (a + b) * (a - b) = a ^ 2 - b ^ 2 :=
+  calc
+    (a + b) * (a - b) = a ^ 2 - a * b + b * a - b ^ 2  := by rw [add_mul, mul_sub, mul_sub, add_sub, ← pow_two, ← pow_two]
+    _ = a ^ 2 + (a * b - b * a) - b ^ 2                := by ring
+    _ = a ^ 2 + 0 - b ^ 2                              := by ring
+    _ = a ^ 2 - b ^ 2                                  := by rw [add_zero]
 
 #check pow_two a
 #check mul_sub a b c
