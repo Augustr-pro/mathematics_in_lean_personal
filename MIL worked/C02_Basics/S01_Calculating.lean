@@ -182,9 +182,15 @@ end
 section
 variable (a b c d : ℝ)
 
--- pure
+-- pure, formatting makes InfoView quick
 example : (a + b) * (c + d) = a * c + a * d + b * c + b * d := by
-  rw [mul_add, add_mul, add_mul, ← add_assoc, add_assoc (a*c), add_comm (b*c) (a*d), ← add_assoc (a*c)]
+  rw [  mul_add,
+        add_mul,
+        add_mul,
+        ← add_assoc,
+        add_assoc (a*c),
+        add_comm (b*c) (a*d),
+        ← add_assoc (a*c)]
 
 -- structured
 example
