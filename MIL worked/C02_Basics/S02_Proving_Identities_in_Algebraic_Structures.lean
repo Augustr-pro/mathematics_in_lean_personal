@@ -103,7 +103,10 @@ theorem neg_eq_of_add_eq_zero
 (h : a + b = 0)
 : -a = b :=
   by
-    sorry
+    rw [← neg_add_cancel_left a b,
+        ← add_comm,
+        h,
+        zero_add]
 
 theorem eq_neg_of_add_eq_zero {a b : R} (h : a + b = 0) : a = -b := by
   sorry
