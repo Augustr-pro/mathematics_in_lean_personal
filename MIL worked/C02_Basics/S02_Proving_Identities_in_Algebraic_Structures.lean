@@ -152,8 +152,19 @@ example (a b : ℝ) : a - b = a + -b := by
 namespace MyRing
 variable {R : Type*} [Ring R]
 
-theorem self_sub (a : R) : a - a = 0 := by
-  sorry
+theorem self_sub
+(a : R)
+: a - a = 0 :=
+  by
+    rw [sub_eq_add_neg,
+        add_neg_cancel]
+
+--mentioned exercise
+theorem alt_self_sub
+(a : ℝ)
+: a - a = 0 :=
+  by
+    exact sub_self a
 
 theorem one_add_one_eq_two : 1 + 1 = (2 : R) := by
   norm_num
