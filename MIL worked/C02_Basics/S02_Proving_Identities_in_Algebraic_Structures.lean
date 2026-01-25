@@ -119,12 +119,18 @@ theorem eq_neg_of_add_eq_zero
         h,
         add_zero]
 
-theorem neg_zero : (-0 : R) = 0 := by
-  apply neg_eq_of_add_eq_zero
-  rw [add_zero]
+theorem neg_zero :
+(-0 : R) = 0 :=
+  by
+    apply neg_eq_of_add_eq_zero
+    rw [add_zero]
 
-theorem neg_neg (a : R) : - -a = a := by
-  sorry
+theorem neg_neg
+(a : R)
+: - -a = a :=
+  by
+    apply neg_eq_of_add_eq_zero
+    rw [neg_add_cancel]
 
 end MyRing
 
