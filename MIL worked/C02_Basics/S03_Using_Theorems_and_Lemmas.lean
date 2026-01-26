@@ -76,17 +76,31 @@ example (h : 1 ≤ a) (h' : b ≤ c) : 2 + a + exp b ≤ 3 * a + exp c := by
 #check (exp_pos : ∀ a, 0 < exp a)
 #check add_le_add_left
 
-example (h : a ≤ b) : exp a ≤ exp b := by
-  rw [exp_le_exp]
-  exact h
+example
+(h : a ≤ b)
+: exp a ≤ exp b :=
+  by
+    rw [exp_le_exp]
+    exact h
 
-example (h₀ : a ≤ b) (h₁ : c < d) : a + exp c + e < b + exp d + e := by
-  apply add_lt_add_of_lt_of_le
-  · apply add_lt_add_of_le_of_lt h₀
-    apply exp_lt_exp.mpr h₁
-  apply le_refl
+example
+(h₀ : a ≤ b)
+(h₁ : c < d)
+: a + exp c + e < b + exp d + e :=
+  by
+    apply add_lt_add_of_lt_of_le              --break into subgoal and get rid of e
+    · apply add_lt_add_of_le_of_lt h₀         --get rid of a and b because a ≤ b
+      apply exp_lt_exp.mpr h₁                 --
+    apply le_refl                             -- JUST LOOK AT IT BRO
 
-example (h₀ : d ≤ e) : c + exp (a + d) ≤ c + exp (a + e) := by sorry
+example
+(h₀ : d ≤ e)
+: c + exp (a + d) ≤ c + exp (a + e) :=
+  by
+    apply add_le_add_left
+    apply exp_le_exp.mpr
+    apply add_le_add_left
+    apply h₀
 
 example : (0 : ℝ) < 1 := by norm_num
 
