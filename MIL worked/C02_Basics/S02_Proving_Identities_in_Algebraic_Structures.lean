@@ -227,3 +227,23 @@ theorem mul_inv_cancel_explicit
 end MyGroup
 
 end
+
+
+--namespace as toolkit testing
+
+namespace A
+variable {R : Type*} [Ring R]
+
+/--
+add_comm
+-/
+theorem
+«a + b = b + a»
+(a b : Nat)
+: a + b = b + a :=
+  by
+    apply add_comm
+
+#check A.«a + b = b + a»
+
+end A
