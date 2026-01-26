@@ -125,7 +125,7 @@ example : |a*b| ≤ (a^2 + b^2)/2 := by
 
 #check abs_le'.mpr
 
-------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
 
 namespace A
 
@@ -145,7 +145,7 @@ theorem «a ≤ b → b < c → a < c» {a b c : ℝ} : a ≤ b → b < c → a 
 theorem «a < b → b ≤ c → a < c» {a b c : ℝ} : a < b → b ≤ c → a < c := lt_of_lt_of_le
 
 
----------------------------------------
+--------------------
 
 --problem 1
 example
@@ -160,7 +160,7 @@ example
     apply lt_of_le_of_lt h₂
     apply h₃
 
---problem 1
+--problem 1 alt naming
 example
 (h₀ : a ≤ b)
 (h₁ : b < c)
@@ -173,4 +173,53 @@ example
     apply A.«a ≤ b → b < c → a < c» h₂
     apply h₃
 
+--problem 1 forbidden tactic
+example
+(h : 2 * a ≤ 3 * b)
+(h' : 1 ≤ a)
+(h'' : d = 2)
+: d + a ≤ 5 * b :=
+  by
+    linarith
+
 end A
+
+-----------------------------------------------------------------------------------------------------
+
+--trying out abbrev
+namespace B
+
+variable {α : Type} [Preorder α]
+
+/-- Equivalent to `le_refl` -/
+abbrev «a ≤ a» (a : α) := le_refl a
+
+/-- Equivalent to `le_trans` -/
+abbrev «a ≤ b → b ≤ c → a ≤ c» := @le_trans α _
+
+/-- Equivalent to `lt_trans` -/
+abbrev «a < b → b < c → a < c» := @lt_trans α _
+
+/-- Equivalent to `lt_of_le_of_lt` -/
+abbrev «a ≤ b → b < c → a < c» := @lt_of_le_of_lt α _
+
+/-- Equivalent to `lt_of_lt_of_le` -/
+abbrev «a < b → b ≤ c → a < c» := @lt_of_lt_of_le α _
+
+---------------------------------------
+
+-- problem 1
+example
+(h₀ : a ≤ b)
+(h₁ : b < c)
+(h₂ : c ≤ d)
+(h₃ : d < e)
+: a < e :=
+  by
+    -- Now works perfectly with the abbreviations
+    apply B.«a ≤ b → b < c → a < c» h₀
+    apply B.«a < b → b < c → a < c» h₁
+    apply B.«a ≤ b → b < c → a < c» h₂
+    exact h₃
+
+end B
