@@ -129,60 +129,48 @@ example : |a*b| ≤ (a^2 + b^2)/2 := by
 
 namespace A
 
-/-
-/--
-NAME
--/
-theorem
-«STATEMENT»
-: STATEMENT :=
-  by
-    apply NAME
--/
+/--le_refl-/
+theorem «a ≤ a» {a : ℝ} : a ≤ a := le_refl a
 
-/--
-le_refl
--/
-theorem
-«a ≤ a»
-: ∀ a : ℝ, a ≤ a :=
-  by
-    apply le_refl
+/--le_trans-/
+theorem «a ≤ b → b ≤ c → a ≤ c» {a b c : ℝ} : a ≤ b → b ≤ c → a ≤ c := le_trans
 
-/--
-le_trans
--/
-theorem
-«a ≤ b → b ≤ c → a ≤ c»
-: a ≤ b → b ≤ c → a ≤ c :=
-  by
-    apply le_trans
+/--lt_trans-/
+theorem «a < b → b < c → a < c» {a b c : ℝ} : a < b → b < c → a < c := lt_trans
 
-/--
-lt_of_le_of_lt
--/
-theorem
-«a ≤ b → b < c → a < c»
-: a ≤ b → b < c → a < c :=
-  by
-    apply lt_of_le_of_lt
+/--lt_of_le_of_lt-/
+theorem «a ≤ b → b < c → a < c» {a b c : ℝ} : a ≤ b → b < c → a < c := lt_of_le_of_lt
 
-/--
-lt_of_lt_of_le
--/
-theorem
-«a < b → b ≤ c → a < c»
-: a < b → b ≤ c → a < c :=
-  by
-    apply lt_of_lt_of_le
+/--lt_of_lt_of_le-/
+theorem «a < b → b ≤ c → a < c» {a b c : ℝ} : a < b → b ≤ c → a < c := lt_of_lt_of_le
 
-/--
-lt_trans
--/
-theorem
-«a < b → b < c → a < c»
-: a < b → b < c → a < c :=
+
+---------------------------------------
+
+--problem 1
+example
+(h₀ : a ≤ b)
+(h₁ : b < c)
+(h₂ : c ≤ d)
+(h₃ : d < e)
+: a < e :=
   by
-    apply lt_trans
+    apply lt_of_le_of_lt h₀
+    apply lt_trans h₁
+    apply lt_of_le_of_lt h₂
+    apply h₃
+
+--problem 1
+example
+(h₀ : a ≤ b)
+(h₁ : b < c)
+(h₂ : c ≤ d)
+(h₃ : d < e)
+: a < e :=
+  by
+    apply A.«a ≤ b → b < c → a < c» h₀
+    apply A.«a < b → b < c → a < c» h₁
+    apply A.«a ≤ b → b < c → a < c» h₂
+    apply h₃
 
 end A
