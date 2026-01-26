@@ -42,7 +42,7 @@ example (x : ℝ) : x ≤ x :=
 #check (lt_of_lt_of_le : a < b → b ≤ c → a < c)
 #check (lt_trans : a < b → b < c → a < c)
 
--- Try this.
+-- Try this. SEE BOTTOM
 example (h₀ : a ≤ b) (h₁ : b < c) (h₂ : c ≤ d) (h₃ : d < e) : a < e := by
   sorry
 
