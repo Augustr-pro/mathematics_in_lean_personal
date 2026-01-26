@@ -129,16 +129,60 @@ example : |a*b| ≤ (a^2 + b^2)/2 := by
 
 namespace A
 
+/-
+/--
+NAME
+-/
 theorem
-le_refl_A
+«STATEMENT»
+: STATEMENT :=
+  by
+    apply NAME
+-/
+
+/--
+le_refl
+-/
+theorem
+«a ≤ a»
 : ∀ a : ℝ, a ≤ a :=
   by
     apply le_refl
 
+/--
+le_trans
+-/
 theorem
-le_trans_A
+«a ≤ b → b ≤ c → a ≤ c»
 : a ≤ b → b ≤ c → a ≤ c :=
   by
     apply le_trans
+
+/--
+lt_of_le_of_lt
+-/
+theorem
+«a ≤ b → b < c → a < c»
+: a ≤ b → b < c → a < c :=
+  by
+    apply lt_of_le_of_lt
+
+/--
+lt_of_lt_of_le
+-/
+theorem
+«a < b → b ≤ c → a < c»
+: a < b → b ≤ c → a < c :=
+  by
+    apply lt_of_lt_of_le
+
+/--
+lt_trans
+-/
+theorem
+«a < b → b < c → a < c»
+: a < b → b < c → a < c :=
+  by
+    apply lt_trans
 
 end A
