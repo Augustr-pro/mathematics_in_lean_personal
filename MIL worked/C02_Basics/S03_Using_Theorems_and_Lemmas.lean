@@ -104,17 +104,80 @@ example
 
 example : (0 : ℝ) < 1 := by norm_num
 
-example (h : a ≤ b) : log (1 + exp a) ≤ log (1 + exp b) := by
-  have h₀ : 0 < 1 + exp a := by sorry
-  apply log_le_log h₀
-  sorry
+example
+(h : a ≤ b)
+: log (1 + exp a) ≤ log (1 + exp b) :=
+  by
+    have h₀ : 0 < 1 + exp a := by linarith [exp_pos a]   --would love to see this by an apply split
+    apply log_le_log h₀
+    norm_num
+    apply h
 
 example : 0 ≤ a ^ 2 := by
-  -- apply?
+  --apply?
   exact sq_nonneg a
 
-example (h : a ≤ b) : c - exp b ≤ c - exp a := by
-  sorry
+example
+(h : a ≤ b)
+: c - exp b ≤ c - exp a :=
+  by
+    apply sub_le_sub_left
+    apply exp_le_exp.mpr
+    apply h
+
+
+
+/- Gemini
+
+`***` Input:
+Ok we are going to start with
+
+`c - exp b ≤ c - exp a`
+
+help me translate my steps to LEAN
+
+I want to,
+turn both the `- exp` into `+ -exp`
+get rid of `c +` on both sides
+turn `-exp b ≤ -exp a` into `exp a ≤ exp b`
+
+`***` Code output (there was more but seemed commentary):
+example (a b c : ℝ) (h : c - Real.exp b ≤ c - Real.exp a) :
+  Real.exp a ≤ Real.exp b := by
+
+  -- Step 1: Turn "- exp" into "+ -exp"
+  -- We rewrite subtraction as addition of a negative.
+  rw [sub_eq_add_neg, sub_eq_add_neg] at h
+  -- State at h: c + -Real.exp b ≤ c + -Real.exp a
+
+  -- Step 2: Get rid of "c +" on both sides
+  -- We rewrite using the "iff" lemma that says adding c doesn't change order.
+  rw [add_le_add_iff_left] at h
+  -- State at h: -Real.exp b ≤ -Real.exp a
+
+  -- Step 3: Turn "-exp b ≤ -exp a" into "exp a ≤ exp b"
+  -- We rewrite using the lemma that negating flips the inequality.
+  rw [neg_le_neg_iff] at h
+  -- State at h: Real.exp a ≤ Real.exp b
+
+  exact h
+-/
+example
+(h : a ≤ b)
+: c - exp b ≤ c - exp a :=
+  by
+    rw [sub_eq_add_neg, sub_eq_add_neg]
+    rw [add_le_add_iff_left]
+    rw [neg_le_neg_iff]
+    apply exp_le_exp.mpr
+    exact h
+
+-- linarith
+example
+(h : a ≤ b)
+: c - exp b ≤ c - exp a :=
+  by linarith [exp_le_exp.mpr h]
+
 
 example : 2*a*b ≤ a^2 + b^2 := by
   have h : 0 ≤ a^2 - 2*a*b + b^2
