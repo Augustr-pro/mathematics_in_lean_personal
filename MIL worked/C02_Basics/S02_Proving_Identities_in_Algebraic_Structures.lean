@@ -208,6 +208,22 @@ theorem mul_one (a : G) : a * 1 = a := by
 theorem mul_inv_rev (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹ := by
   sorry
 
+theorem mul_inv_cancel_explicit
+(a : G)
+: a * a⁻¹ = 1 :=
+  by
+    have h : (a * a⁻¹)⁻¹ * (a * a⁻¹ * (a * a⁻¹)) = 1 := by
+      rw [mul_assoc,
+          ← mul_assoc a⁻¹ a,
+          inv_mul_cancel,
+          one_mul,
+          inv_mul_cancel]
+    rw [← h,
+        ← mul_assoc,
+        inv_mul_cancel,
+        one_mul]
+
+
 end MyGroup
 
 end
