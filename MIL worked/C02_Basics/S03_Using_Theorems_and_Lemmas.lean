@@ -125,3 +125,20 @@ example : |a*b| ≤ (a^2 + b^2)/2 := by
 
 #check abs_le'.mpr
 
+------------------------------------------------------------------
+
+namespace A
+
+theorem
+le_refl_A
+: ∀ a : ℝ, a ≤ a :=
+  by
+    apply le_refl
+
+theorem
+le_trans_A
+: a ≤ b → b ≤ c → a ≤ c :=
+  by
+    apply le_trans
+
+end A
