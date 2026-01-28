@@ -46,8 +46,28 @@ example : max a b = max b a := by
     apply le_max_left
 
 
-example : min (min a b) c = min a (min b c) := by
-  sorry
+example
+: min (min a b) c = min a (min b c) := by
+  apply le_antisymm
+  · apply le_min
+    · apply le_trans
+      apply min_le_left
+      apply min_le_left
+    apply le_min
+    · apply le_trans
+      apply min_le_left
+      apply min_le_right
+    apply min_le_right
+  apply le_min
+  · apply le_min
+    · apply min_le_left
+    apply le_trans
+    apply min_le_right
+    apply min_le_left
+  apply le_trans
+  apply min_le_right
+  apply min_le_right
+
 
 
 theorem aux : min a b + c ≤ min (a + c) (b + c) := by
@@ -94,6 +114,22 @@ end
 ----------------------------
 namespace A
 
+/-- `le_trans` -/
+abbrev « a ≤ b → b ≤ c → a ≤ c » := @le_trans
+/-- `le_antisymm` -/
+abbrev « a ≤ b → b ≤ a → a = b » := @le_antisymm
+/-- `min_le_left` -/
 abbrev « min a b ≤ a » := @min_le_left
+/-- `min_le_right` -/
+abbrev « min a b ≤ b » := @min_le_right
+/-- `le_min` -/
+abbrev « c ≤ a → c ≤ b → c ≤ min a b » := @le_min
+
+----
+
+example
+: min (min a b) c = min a (min b c) :=
+  by
+    sorry
 
 end A
