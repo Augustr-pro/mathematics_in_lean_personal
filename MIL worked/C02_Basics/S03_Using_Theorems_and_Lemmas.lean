@@ -266,22 +266,22 @@ end A
 --trying out abbrev
 namespace B
 
-variable {α : Type} [Preorder α]
+
 
 /-- Equivalent to `le_refl` -/
-abbrev «a ≤ a» (a : α) := le_refl a
+abbrev «a ≤ a» := @le_refl
 
 /-- Equivalent to `le_trans` -/
-abbrev «a ≤ b → b ≤ c → a ≤ c» := @le_trans α _
+abbrev «a ≤ b → b ≤ c → a ≤ c» := @le_trans
 
 /-- Equivalent to `lt_trans` -/
-abbrev «a < b → b < c → a < c» := @lt_trans α _
+abbrev «a < b → b < c → a < c» := @lt_trans
 
 /-- Equivalent to `lt_of_le_of_lt` -/
-abbrev «a ≤ b → b < c → a < c» := @lt_of_le_of_lt α _
+abbrev «a ≤ b → b < c → a < c» := @lt_of_le_of_lt
 
 /-- Equivalent to `lt_of_lt_of_le` -/
-abbrev «a < b → b ≤ c → a < c» := @lt_of_lt_of_le α _
+abbrev «a < b → b ≤ c → a < c» := @lt_of_lt_of_le
 
 ---------------------------------------
 

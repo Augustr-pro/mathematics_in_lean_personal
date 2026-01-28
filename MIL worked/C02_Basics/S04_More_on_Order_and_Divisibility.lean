@@ -39,9 +39,17 @@ example : min a b = min b a := by
     apply min_le_left
 
 example : max a b = max b a := by
-  sorry
+  apply le_antisymm
+  repeat
+    apply max_le
+    apply le_max_right
+    apply le_max_left
+
+
 example : min (min a b) c = min a (min b c) := by
   sorry
+
+
 theorem aux : min a b + c ≤ min (a + c) (b + c) := by
   sorry
 example : min a b + c = min (a + c) (b + c) := by
@@ -82,3 +90,10 @@ example : Nat.gcd m n = Nat.gcd n m := by
 end
 
 
+
+----------------------------
+namespace A
+
+abbrev « min a b ≤ a » := @min_le_left
+
+end A
