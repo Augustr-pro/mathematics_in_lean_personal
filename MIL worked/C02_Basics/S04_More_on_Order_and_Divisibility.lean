@@ -114,6 +114,8 @@ end
 ----------------------------
 namespace A
 
+variable (a b c d : ℝ)
+
 /-- `le_trans` -/
 abbrev « a ≤ b → b ≤ c → a ≤ c » := @le_trans
 /-- `le_antisymm` -/
@@ -130,6 +132,6 @@ abbrev « c ≤ a → c ≤ b → c ≤ min a b » := @le_min
 example
 : min (min a b) c = min a (min b c) :=
   by
-    sorry
+    apply A.« a ≤ b → b ≤ a → a = b »
 
 end A
