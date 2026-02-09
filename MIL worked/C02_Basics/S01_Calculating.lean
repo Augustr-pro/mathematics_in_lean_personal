@@ -257,3 +257,145 @@ end
 example (a b c : ℕ) (h : a + b = c) : (a + b) * (a + b) = a * c + b * c := by
   nth_rw 2 [h]
   rw [add_mul]
+
+
+--------------------------------------------------------------------------------------------------------------
+-- reworked exercies
+
+namespace A
+
+-----------------------------------------
+-- Proof Term rename and whitelist
+
+/-- Equivalent to `mul_comm` -/
+abbrev « a * b = b * a » := @mul_comm
+
+/-- Equivalent to `mul_assoc` -/
+abbrev « a * b * c = a * (b * c) » := @mul_assoc
+
+-----------------------------------------
+
+-- ex1
+example
+(a b c : ℝ)
+: c * b * a = b * (a * c) :=
+  by
+    rw [
+      A.« a * b = b * a » c b,
+      A.« a * b * c = a * (b * c) » b c a,
+      A.« a * b = b * a » a c
+    ]
+
+-- ex2
+example
+(a b c : ℝ)
+: a * (b * c) = b * (a * c) :=
+  by
+    rw [
+      ← A.« a * b * c = a * (b * c) » a b c,
+      A.« a * b = b * a » a b,
+      A.« a * b * c = a * (b * c) » b a c
+    ]
+
+-- ex3 no args
+example
+(a b c : ℝ)
+: a * (b * c) = b * (c * a) :=
+  by
+    rw [
+      A.« a * b = b * a »,
+      A.« a * b * c = a * (b * c) »
+    ]
+
+-- ex4 only one arg
+example
+(a b c : ℝ)
+: a * (b * c) = b * (a * c) :=
+  by
+    rw [
+      A.« a * b = b * a » a,
+      A.« a * b * c = a * (b * c) » b,
+      A.« a * b = b * a » c
+    ]
+
+-- ex5
+example
+(a b c d e f : ℝ)
+(h : b * c = e * f)
+: a * b * c * d = a * e * f * d :=
+  by
+    rw [
+      A.« a * b * c = a * (b * c) » a b c,
+      h,
+      ← A.« a * b * c = a * (b * c) » a e f
+    ]
+
+
+-----------------------------------------
+/-- Equivalent to `sub_self` -/
+abbrev « a - a = 0 » := @sub_self
+-----------------------------------------
+
+-- ex6 use sub_self
+example
+(a b c d : ℝ)
+(hyp : c = b * a - d)
+(hyp' : d = a * b)
+: c = 0 :=
+  by
+    rw [
+      hyp,
+      hyp',
+      A.« a * b = b * a » b a,
+      A.« a - a = 0 » (a*b)
+    ]
+
+-----------------------------------------
+/-- Equivalent to `two_mul` -/
+abbrev « 2 * a = a + a » := @two_mul
+
+/-- Equivalent to `pow_two` -/
+abbrev « a ^ 2 = a * a » := @pow_two
+
+/-- Equivalent to `mul_sub` -/
+abbrev « a * (b - c) = a * b - a * c » := @mul_sub
+
+/-- Equivalent to `add_mul` -/
+abbrev « (a + b) * c = a * c + b * c » := @add_mul
+
+/-- Equivalent to `add_sub` -/
+abbrev « a + (b - c) = a + b - c » := @add_sub
+
+/-- Equivalent to `sub_sub` -/
+abbrev « a - b - c = a - (b + c) » := @sub_sub
+
+/-- Equivalent to `add_zero` -/
+abbrev « a + 0 = a » := @add_zero
+-----------------------------------------
+
+-- ex7 pure, formatting makes InfoView quick
+example
+(a b c d : ℝ)
+: (a + b) * (c + d) = a * c + a * d + b * c + b * d := by
+  rw [  mul_add,
+        add_mul,
+        add_mul,
+        ← add_assoc,
+        add_assoc (a*c),
+        add_comm (b*c) (a*d),
+        ← add_assoc (a*c)]
+
+-- ex7 structured
+example
+(a b c d : ℝ)
+: (a + b) * (c + d) = a * c + a * d + b * c + b * d :=
+  calc
+    (a + b) * (c + d) = (a + b) * c + (a + b) * d           := by rw [mul_add]
+    _                 = a * c + b * c + (a + b) * d         := by rw [add_mul]
+    _                 = a * c + b * c + (a * d + b * d)     := by rw [add_mul]
+    _                 = a * c + b * c + a * d + b * d       := by rw [← add_assoc]
+    _                 = a * c + (b * c + a * d) + b * d     := by rw [add_assoc (a*c)]
+    _                 = a * c + (a * d + b * c) + b * d     := by rw [add_comm (b*c) (a*d)]
+    _                 = a * c + a * d + b * c + b * d       := by rw [← add_assoc (a*c)]
+
+end A
