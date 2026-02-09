@@ -377,13 +377,10 @@ abbrev « a + 0 = a » := @add_zero
 example
 (a b c d : ℝ)
 : (a + b) * (c + d) = a * c + a * d + b * c + b * d := by
-  rw [  mul_add,
-        add_mul,
-        add_mul,
-        ← add_assoc,
-        add_assoc (a*c),
-        add_comm (b*c) (a*d),
-        ← add_assoc (a*c)]
+  rw [
+    A.« (a + b) * c = a * c + b * c » a b (c+d)
+  ]
+  sorry
 
 -- ex7 structured
 example
