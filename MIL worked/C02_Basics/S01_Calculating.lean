@@ -1,17 +1,36 @@
 import MIL.Common
 import Mathlib.Data.Real.Basic
 -- An example.
-example (a b c : ℝ) : a * b * c = b * (a * c) := by
+theorem exfir1
+ (a b c : ℝ) : a * b * c = b * (a * c) := by
   rw [mul_comm a b]
   rw [mul_assoc b a c]
 
+#print exfir1
+
 -- example but pretty
-example
+theorem exfir2
   (a b c : ℝ)
   : a * b * c = b * (a * c) :=
     calc
       a * b * c = b * a * c     := by rw [mul_comm a b]
       _          = b * (a * c)  := by rw [mul_assoc b a c]
+
+#print exfir2
+
+theorem exfir3
+  (a b c : ℝ)
+  : a * b * c = b * (a * c) :=
+    calc
+      a * b * c = b * a * c     := by ring
+      _          = b * (a * c)  := by ring
+
+theorem exfir4
+  (a b c : ℝ)
+  : a * b * c = b * (a * c) :=
+    calc
+      a * b * c = b * a * c     := by simp only [mul_comm]
+      _          = b * (a * c)  := by ring
 
 -- Try these.
 example (a b c : ℝ) : c * b * a = b * (a * c) := by
